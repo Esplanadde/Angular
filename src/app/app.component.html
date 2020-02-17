@@ -1,0 +1,145 @@
+<div class="container">
+  <div class="first" >
+    <ng-container *ngFor="let confs of configStatusArr">
+      <clr-tree>
+        <clr-tree-node>
+          configStatus: {{confs}}
+          <clr-tree-node *ngFor="let j of configs; index as i">
+            {{j?.configStatus ===confs ? i : null}}
+            <clr-tree-node *ngIf="j.configStatus===confs">date: {{date || j?.date | date}}</clr-tree-node>
+            <clr-tree-node *ngIf="j.configStatus===confs">configName: {{j?.configName}}</clr-tree-node>
+            <clr-tree-node *ngIf="j.configStatus===confs">installMethod: {{j?.installMethod}}</clr-tree-node>
+            <clr-tree-node *ngIf="j.configStatus===confs">
+              nodes:
+              <clr-tree-node *ngFor="let k of j?.nodes; index as i">
+                index: {{i}}
+                <clr-tree-node>host: {{k?.host}}</clr-tree-node>
+                <clr-tree-node>status: {{k?.status}}</clr-tree-node>
+                <clr-tree-node>message: {{k?.message}}</clr-tree-node>
+              </clr-tree-node>
+            </clr-tree-node>
+          </clr-tree-node>
+        </clr-tree-node>
+      </clr-tree>
+    </ng-container>
+  </div>
+
+  <div class="second">
+    <clr-stack-view>
+      <clr-stack-header>
+        Editor
+        <button
+          class="stack-action btn btn-sm btn-link but"
+          (click)="editModal = true"
+          type="button">Edit</button>
+      </clr-stack-header>
+      <ng-container *ngFor="let method of installMethodArr">
+        <clr-stack-block>
+          <clr-stack-label>installMethod</clr-stack-label>
+          <clr-stack-content>{{method}}</clr-stack-content>
+          <clr-stack-block *ngFor="let j of configs;">
+            <clr-stack-label>configStatus<br/></clr-stack-label>
+            <clr-stack-content>{{j?.configStatus}}<br/></clr-stack-content>
+            <clr-stack-label>date<br/></clr-stack-label>
+            <clr-stack-content>{{date || j?.date | date}}<br/></clr-stack-content>
+            <clr-stack-label>configName <br/></clr-stack-label>
+            <clr-stack-content>{{j?.configName}}<br/></clr-stack-content>
+            <clr-stack-block *ngFor="let k of j?.nodes">
+              <clr-stack-label>host<br/></clr-stack-label>
+              <clr-stack-content>{{k?.host}}<br/></clr-stack-content>
+              <clr-stack-label>status<br/></clr-stack-label>
+              <clr-stack-content>{{k?.status}}<br/></clr-stack-content>
+              <clr-stack-label>message<br/></clr-stack-label>
+              <clr-stack-content>{{k?.message}}<br/></clr-stack-content>
+            </clr-stack-block>
+            <clr-stack-label *ngIf="j?.installId">installId<br/></clr-stack-label>
+            <clr-stack-content>{{j?.installId}}</clr-stack-content>
+          </clr-stack-block>
+        </clr-stack-block>
+      </ng-container>
+
+
+    </clr-stack-view>
+
+    <clr-modal [(clrModalOpen)]="editModal">
+      <h3 class="modal-title">Edit mode</h3>
+      <div class="modal-body">
+        <clr-stack-view>
+          <ng-container *ngFor="let method of installMethodArr">
+          <clr-stack-block [clrStackViewLevel]="1">
+            <clr-stack-label>installMethod: </clr-stack-label>
+            <clr-stack-content>{{method}}<br/></clr-stack-content>
+            <clr-stack-block *ngFor="let block of configs; index as j">
+              <clr-stack-label>configStatus: <br/></clr-stack-label>
+              <clr-stack-content>
+                <input type="text" [(ngModel)]="block.configStatus" #configStatuses="ngModel" (change)="onConfigStatusChange(configStatuses.value)" class="clr-input"/><br/>
+              </clr-stack-content>
+              <clr-stack-label>date: <br/></clr-stack-label>
+              <clr-stack-content>
+                <input type="text" [(ngModel)]="block.date" #date="ngModel" (change)="onDateChange(date.value)" class="clr-input"/><br/>
+              </clr-stack-content>
+              <clr-stack-label>configName: <br/></clr-stack-label>
+              <clr-stack-content>
+                <input type="text" [(ngModel)]="block.configName" #configNames="ngModel" (change)="onConfigNameChange(configNames.value)" class="clr-input"/><br/>
+              </clr-stack-content>
+              <clr-stack-label>installMethod: <br/></clr-stack-label>
+              <clr-stack-content>
+                <input type="text" [(ngModel)]="block.installMethod" #installMethods="ngModel" (change)="onInstallMethodChange(installMethods.value)" class="clr-input"/><br/>
+              </clr-stack-content>
+              <clr-stack-block *ngFor="let k of block?.nodes; index as i">
+                <clr-stack-label>host: <br/></clr-stack-label>
+                <clr-stack-content>
+                  <input type="text" [(ngModel)]="k.host" #nodeHosts="ngModel" (change)="onNodeHostChange(nodeHosts.value[i])" class="clr-input"/><br/>
+                </clr-stack-content>
+                <clr-stack-label>status: <br/></clr-stack-label>
+                <clr-stack-content>
+                  <input type="text" [(ngModel)]="k.status" #nodeStatuses="ngModel" (change)="onNodeStatusChange(nodeStatuses.value[i])" class="clr-input"/><br/>
+                </clr-stack-content>
+                <clr-stack-label>message: <br/></clr-stack-label>
+                <clr-stack-content>
+                  <input type="text" [(ngModel)]="k.message" #nodeMessages="ngModel" (change)="onNodeMessageChange(nodeMessages.value[i])" class="clr-input"/><br/>
+                </clr-stack-content>
+              </clr-stack-block>
+              <clr-stack-label>InstallId: </clr-stack-label>
+              <clr-stack-content>
+                <input type="text" [(ngModel)]="block.installId" #installIds="ngModel" (change)="onInstallIdChange(installIds.value)" class="clr-input"/><br/>
+              </clr-stack-content>
+            </clr-stack-block>
+          </clr-stack-block>
+          </ng-container>
+        </clr-stack-view>
+      </div>
+
+      <div class="modal-footer">
+         <button type="button" class="btn btn-link" (click)="editModal = false">Done</button>
+      </div>
+    </clr-modal>
+  </div>
+
+  <div class="third">
+    <clr-datagrid>
+      <clr-dg-column>configStatus</clr-dg-column>
+      <clr-dg-column>date</clr-dg-column>
+      <clr-dg-column>configName</clr-dg-column>
+      <clr-dg-column>installMethod</clr-dg-column>
+      <clr-dg-column>node</clr-dg-column>
+
+      <clr-dg-row *ngFor="let set of configs">
+        <clr-dg-cell>{{set?.configStatus}}</clr-dg-cell>
+        <clr-dg-cell>{{set?.date | date}}</clr-dg-cell>
+        <clr-dg-cell>{{set?.configName}}</clr-dg-cell>
+        <clr-dg-cell>{{set?.installMethod}}</clr-dg-cell>
+        <clr-dg-cell>
+          <ng-container *ngFor="let l of set?.nodes; index as i">
+            node: {{i}}<br/>
+            host: {{l?.host}}<br/>
+            status: {{l?.status}}<br/>
+            message: {{l?.message}}<br/><br/>
+          </ng-container>
+        </clr-dg-cell>
+      </clr-dg-row>
+
+      <clr-dg-footer>22 blocks</clr-dg-footer>
+    </clr-datagrid>
+  </div>
+</div>

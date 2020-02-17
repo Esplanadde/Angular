@@ -1,0 +1,42 @@
+
+div {
+  font: 16px "Helvetica Neue", sans-serif;
+  color: black;
+  margin: 0;
+  padding: 0;
+}
+.container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: stretch;
+
+}
+
+.first {
+  background-color: lightgray;
+  flex-basis: 33.33%;
+  flex-grow: 0;
+  flex-shrink: 0;
+  padding-top: 35px;
+
+}
+
+.second {
+  background-color: lightgray;
+  flex-basis: 66.66%;
+  flex-grow: 0;
+  flex-shrink: 0;
+  padding-top: 5px;
+  padding-right: 40px;
+}
+
+.third {
+  background-color: lightgray;
+  flex-basis: 100%;
+  flex-grow: 0;
+  flex-shrink: 0;
+
+}
+
